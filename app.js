@@ -746,6 +746,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Setup OTP inputs auto-advance
   setupOtpInputs();
 
+  // Automatically maximize phone screen whenever user clicks any button/interaction in the phone
+  const phoneContainer = document.querySelector('.phone-mockup');
+  if (phoneContainer) {
+    phoneContainer.addEventListener('click', (e) => {
+      maximizePhoneScreen();
+    });
+  }
+
   // If not logged in, ensure login view is active and bottom nav hidden
   if (!appState.isLoggedIn) {
     switchView('view-login');
@@ -1940,4 +1948,22 @@ function handleLogout() {
   appState.profileCompleted = false;
   appState.hasMatchedWithPriya = false;
   switchView('view-login');
+}
+
+// --- FULLSCREEN / MAXIMIZED VIEW HANDLERS ---
+function maximizePhoneScreen() {
+  if (!document.body.classList.contains('maximized-mode')) {
+    document.body.classList.add('maximized-mode');
+    const label = document.getElementById('text-toggle-max');
+    if (label) label.textContent = 'Restore View';
+  }
+}
+
+function toggleMaximizedView(e) {
+  if (e) e.stopPropagation();
+  document.body.classList.toggle('maximized-mode');
+  const label = document.getElementById('text-toggle-max');
+  if (label) {
+    label.textContent = document.body.classList.contains('maximized-mode') ? 'Restore View' : 'Maximize View';
+  }
 }

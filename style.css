@@ -78,6 +78,10 @@ body {
 }
 
 /* Desktop Wrappers */
+body {
+  transition: padding 0.4s ease;
+}
+
 .app-wrap {
   display: flex;
   width: 100%;
@@ -86,11 +90,13 @@ body {
   align-items: center;
   z-index: 10;
   gap: 40px;
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .desktop-intro {
   flex: 1;
   max-width: 480px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .intro-logo {
@@ -161,6 +167,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .phone-mockup {
@@ -172,6 +179,68 @@ body {
   position: relative;
   box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.7);
   overflow: hidden;
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ================= MAXIMIZED / IMMERSIVE MODE ================= */
+body.maximized-mode {
+  padding: 10px;
+}
+
+body.maximized-mode .desktop-intro {
+  display: none;
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+body.maximized-mode .app-wrap {
+  max-width: 100%;
+  justify-content: center;
+  gap: 0;
+}
+
+body.maximized-mode .phone-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+body.maximized-mode .phone-mockup {
+  width: min(440px, 98vw);
+  height: min(920px, 96vh);
+  border-radius: 48px;
+  border-width: 10px;
+  box-shadow: 0px 30px 90px rgba(0, 0, 0, 0.85), 0 0 50px rgba(254, 60, 114, 0.25);
+}
+
+/* Floating button to toggle / restore Desktop view */
+.btn-floating-view-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  transition: all 0.2s ease;
+}
+
+.btn-floating-view-toggle:hover {
+  background: rgba(254, 60, 114, 0.9);
+  border-color: var(--tinder-pink);
+  transform: scale(1.04);
 }
 
 .phone-screen {
