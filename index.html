@@ -247,20 +247,26 @@
                   <p class="subtitle">Choose your travel mode for this trip.</p>
 
                   <div class="mode-cards-grid">
-                    <!-- Traveling Card -->
-                    <div class="intent-card active" id="intent-traveler" onclick="selectIntentMode('traveler')">
+                    <!-- Traveling Card (Gold Gated) -->
+                    <div class="intent-card" id="intent-traveler" onclick="selectIntentMode('traveler')">
                       <div class="intent-icon">✈️</div>
                       <div class="intent-details">
-                        <h3>I'm traveling</h3>
+                        <div class="intent-title-row">
+                          <h3>I'm traveling</h3>
+                          <span class="gold-pill-tag">✦ GOLD</span>
+                        </div>
                         <p>Find compatible people at my destination</p>
                       </div>
                       <div class="check-indicator">✓</div>
                     </div>
-                    <!-- Local Card -->
-                    <div class="intent-card" id="intent-local" onclick="selectIntentMode('local')">
+                    <!-- Local Card (Always Free) -->
+                    <div class="intent-card active" id="intent-local" onclick="selectIntentMode('local')">
                       <div class="intent-icon">🏠</div>
                       <div class="intent-details">
-                        <h3>I'm a local</h3>
+                        <div class="intent-title-row">
+                          <h3>I'm a local</h3>
+                          <span class="free-pill-tag">FREE</span>
+                        </div>
                         <p>Meet travelers and share my local knowledge</p>
                       </div>
                       <div class="check-indicator">✓</div>

@@ -764,10 +764,6 @@ function switchTab(tabId) {
     switchMode('dating');
     switchView('view-home');
   } else if (tabId === 'travel') {
-    if (!appState.hasGold) {
-      showGoldUpsell();
-      return;
-    }
     switchMode('travel');
     if (appState.profileCompleted) {
       if (appState.preferences.mode === 'local') {
@@ -820,11 +816,6 @@ function switchMode(mode) {
   const travelContent = document.getElementById('travel-home-content');
   const datingContent = document.getElementById('dating-home-content');
 
-  if (mode === 'travel' && !appState.hasGold) {
-    showGoldUpsell();
-    return;
-  }
-
   appState.datingMode = mode;
 
   if (mode === 'dating') {
@@ -851,11 +842,6 @@ function switchMode(mode) {
 }
 
 function startTravelProfile(preSelectedDest) {
-  if (!appState.hasGold) {
-    showGoldUpsell(preSelectedDest);
-    return;
-  }
-  
   if (preSelectedDest) {
     const match = destinationList.find(d => d.code.toLowerCase() === preSelectedDest.toLowerCase()) ||
                   destinationList.find(d => d.name.toLowerCase().includes(preSelectedDest.toLowerCase()));
@@ -864,6 +850,14 @@ function startTravelProfile(preSelectedDest) {
     document.getElementById('input-local-dest').value = fullDest;
     appState.preferences.destination = fullDest;
   }
+  
+  // Set default selection according to tier
+  if (!appState.hasGold) {
+    selectIntentMode('local');
+  } else {
+    selectIntentMode('traveler');
+  }
+  
   switchView('view-preferences');
 }
 
@@ -894,6 +888,11 @@ function prevPrefStep() {
 }
 
 function selectIntentMode(mode) {
+  if (mode === 'traveler' && !appState.hasGold) {
+    showGoldUpsell();
+    return;
+  }
+
   appState.preferences.mode = mode;
   
   const travelerCard = document.getElementById('intent-traveler');
@@ -1738,13 +1737,21 @@ function unlockGoldSubscription() {
   dismissGoldUpsell();
   updateMembershipUI();
   
-  // Activate Travel Mode
-  switchMode('travel');
-  
-  // Show confirmation alert
-  alert("🎉 Welcome to Tinder Gold!\n\nPassport™ and Travel Mode are now unlocked. Find travel companions, explore destinations, and connect before your trip.");
+  // Select traveler mode in preferences and form
+  selectIntentMode('traveler');
 
-  if (appState.pendingDest) {
+  // Activate Travel Mode on segmented toggle
+  switchMode('travel');
+
+  alert("🎉 Welcome to Tinder Gold!\n\nPassport™ and Travel Mode are now unlocked. You can now set destinations, dates, and browse the traveler match feed.");
+
+  if (appState.activeView === 'view-preferences') {
+    // Stay in preferences with Traveler mode now active
+  } else if (appState.activeView === 'view-local-dashboard') {
+    // If upgrading from local host dashboard, switch to traveler mode & discovery
+    appState.preferences.mode = 'traveler';
+    completePreferences();
+  } else if (appState.pendingDest) {
     const dest = appState.pendingDest;
     appState.pendingDest = '';
     startTravelProfile(dest);
