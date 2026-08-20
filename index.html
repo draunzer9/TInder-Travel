@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tinder Travel — Find Your Travel Companion</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background decorative elements -->
+  <div class="bg-blur bg-blur-1"></div>
+  <div class="bg-blur bg-blur-2"></div>
+
+  <!-- Main Viewport Wrap -->
+  <div class="app-wrap">
+    
+    <!-- Desktop Info / Intro Panel -->
+    <div class="desktop-intro">
+      <div class="intro-logo">
+        <svg viewBox="0 0 800 200" class="tinder-travel-logo">
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FE3C72" />
+              <stop offset="100%" stop-color="#FF655B" />
+            </linearGradient>
+          </defs>
+          <text x="10" y="130" font-family="Outfit" font-weight="800" font-size="95" fill="url(#logo-grad)">tinder</text>
+          <text x="320" y="130" font-family="Outfit" font-weight="300" font-size="95" fill="#333">travel</text>
+          <path d="M 640 60 L 685 100 L 665 110 L 640 90 L 625 100 L 635 115 L 620 120 L 605 95 Z" fill="url(#logo-grad)" transform="rotate(-15, 640, 95)" />
+        </svg>
+      </div>
+      <h1>Find people who travel like you.</h1>
+      <p>A dedicated Tinder Travel experience designed for travel companionship and local connections. Toggle modes, set travel plans, check compatibility, and connect safely.</p>
+      <div class="instructions-box">
+        <h3>💡 Live Interactive Features:</h3>
+        <ul>
+          <li><strong>Dating & Travel modes</strong>: Toggle the top slider on the Home Screen.</li>
+          <li><strong>Interactive Onboarding</strong>: Click "Start Travel Profile" to choose preferences and set dates.</li>
+          <li><strong>Card Gestures</strong>: Drag & swipe profile cards (left to Skip, right to Connect), or use the buttons.</li>
+          <li><strong>Compatibility Panel</strong>: Click the info button on Priya's card or click the card itself to view the match details.</li>
+          <li><strong>Local Hosts</strong>: Tap on local host cards (e.g. Arjun) to view their specialized verification profiles.</li>
+          <li><strong>Simulated Live Chat</strong>: Connect with Priya to view match animations and chat. Try sending a custom message or clicking suggested starters!</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Phone Simulator Shell -->
+    <div class="phone-container">
+      <div class="phone-mockup">
+        
+        <!-- Screen Glass -->
+        <div class="phone-screen">
+          
+          <!-- iOS Notch / Dynamic Island -->
+          <div class="dynamic-island">
+            <div class="camera-lens"></div>
+            <div class="speaker-mesh"></div>
+          </div>
+          
+          <!-- iOS Status Bar -->
+          <div class="status-bar">
+            <div class="status-time" id="status-time">9:41</div>
+            <div class="status-icons">
+              <!-- Signal strength -->
+              <svg class="icon-signal" viewBox="0 0 17 12" fill="currentColor">
+                <rect x="0" y="9" width="3" height="3" rx="0.5" />
+                <rect x="4" y="6" width="3" height="6" rx="0.5" />
+                <rect x="8" y="3" width="3" height="9" rx="0.5" />
+                <rect x="12" y="0" width="3" height="12" rx="0.5" />
+              </svg>
+              <!-- Wifi -->
+              <svg class="icon-wifi" viewBox="0 0 18 12" fill="currentColor">
+                <path d="M9 12a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm5.7-5.7a1 1 0 00-1.4 0 6.6 6.6 0 01-8.6 0 1 1 0 10-1.4 1.4c3.2 3.2 8.2 3.2 11.4 0zm2.8-2.8a1 1 0 00-1.4 0 10.6 10.6 0 01-14.2 0 1 1 0 10-1.4 1.4A12.6 12.6 0 0017.5 3.5z" />
+              </svg>
+              <!-- Battery -->
+              <svg class="icon-battery" viewBox="0 0 24 12" fill="currentColor">
+                <rect x="0" y="0" width="20" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <rect x="2" y="2" width="13" height="8" rx="1.5" />
+                <path d="M21 4h1a1 1 0 011 1v2a1 1 0 01-1 1h-1V4z" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- APP VIEW CONTAINER (Dynamic content mounts here) -->
+          <div class="app-views">
+
+            <!-- ================= SCREEN 1: HOME VIEW ================= -->
+            <div class="view active" id="view-home">
+              <div class="view-header">
+                <!-- Segmented Control Mode Toggle -->
+                <div class="mode-toggle-container">
+                  <div class="mode-pill-bg" id="mode-bg"></div>
+                  <button class="mode-btn" id="btn-mode-dating" onclick="switchMode('dating')">❤️ Dating</button>
+                  <button class="mode-btn active" id="btn-mode-travel" onclick="switchMode('travel')">✈️ Travel</button>
+                </div>
+                <div class="profile-header-btn">
+                  <img src="assets/user_avatar.jpg" alt="User Profile" class="header-avatar" onclick="switchView('view-profile-setup')">
+                </div>
+              </div>
+
+              <!-- Travel Mode Home Screen -->
+              <div class="home-scroll-content" id="travel-home-content">
+                <div class="home-hero-text">
+                  <h2>Travel</h2>
+                  <p>Find people who travel like you.</p>
+                </div>
+
+                <!-- Where are you going Card -->
+                <div class="search-card">
+                  <div class="search-input-wrap" onclick="startTravelProfile('Bali')">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="Where are you going?" readonly value="Bali, Indonesia">
+                    <button class="set-dates-pill">Set dates</button>
+                  </div>
+                </div>
+
+                <!-- Trending Destinations -->
+                <div class="trending-section">
+                  <h3>Trending Destinations</h3>
+                  <div class="trending-grid">
+                    <!-- Bali Card -->
+                    <div class="destination-card" onclick="startTravelProfile('Bali')" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.75)), url('assets/bali_card.jpg');">
+                      <div class="dest-badge">🇮🇩 Bali</div>
+                      <div class="dest-info">
+                        <h4>Indonesia</h4>
+                        <span>14 travel matches</span>
+                      </div>
+                    </div>
+                    <!-- Tokyo Card -->
+                    <div class="destination-card" onclick="startTravelProfile('Tokyo')" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.75)), url('assets/tokyo_card.jpg');">
+                      <div class="dest-badge">🇯🇵 Tokyo</div>
+                      <div class="dest-info">
+                        <h4>Japan</h4>
+                        <span>9 travel matches</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Start Travel Profile CTA -->
+                <div class="cta-section">
+                  <button class="btn-primary" onclick="startTravelProfile('')">Start Travel Profile</button>
+                  <div class="social-matches-pill">
+                    <div class="avatar-stack">
+                      <img src="assets/priya_profile.jpg" alt="Traveler 1">
+                      <img src="assets/arjun_profile.jpg" alt="Traveler 2">
+                      <img src="assets/user_avatar.jpg" alt="Traveler 3">
+                    </div>
+                    <span class="matches-count-text"><strong>2,400+</strong> travelers matched this month</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Placeholder Dating Mode Home Screen (hidden by default) -->
+              <div class="home-scroll-content hidden" id="dating-home-content">
+                <div class="dating-placeholder-view">
+                  <div class="dating-logo">❤️</div>
+                  <h2>Tinder Dating Mode</h2>
+                  <p>Browse local matches around you. Switch to <strong>Travel Mode</strong> at the top to search travelers and hosts.</p>
+                  <button class="btn-primary btn-dating-back" onclick="switchMode('travel')">Switch to Travel Mode ✈️</button>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- ================= SCREEN 2: TRAVEL PREFERENCES ================= -->
+            <div class="view" id="view-preferences">
+              <!-- Preferences Progress Header -->
+              <div class="pref-header">
+                <button class="back-btn" onclick="prevPrefStep()">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" id="pref-progress" style="width: 50%;"></div>
+                </div>
+                <div class="step-label" id="pref-step-num">1/2</div>
+              </div>
+
+              <div class="pref-content">
+                
+                <!-- STEP 2.1: Multi-select tags -->
+                <div class="pref-step-view active" id="pref-step-1">
+                  <h2>How do you like to travel?</h2>
+                  <p class="subtitle">Select all that apply — helps us find your best matches.</p>
+
+                  <div class="tags-scroller">
+                    <!-- Travel Style -->
+                    <div class="tag-group">
+                      <h4>TRAVEL STYLE</h4>
+                      <div class="tag-choices" id="choices-style">
+                        <button class="tag-pill" data-category="style" data-val="Solo">Solo</button>
+                        <button class="tag-pill active" data-category="style" data-val="Budget">Budget</button>
+                        <button class="tag-pill" data-category="style" data-val="Premium">Premium</button>
+                        <button class="tag-pill active" data-category="style" data-val="Adventure">Adventure</button>
+                        <button class="tag-pill" data-category="style" data-val="Relaxed">Relaxed</button>
+                      </div>
+                    </div>
+
+                    <!-- Interests -->
+                    <div class="tag-group">
+                      <h4>INTERESTS</h4>
+                      <div class="tag-choices" id="choices-interests">
+                        <button class="tag-pill active" data-category="interests" data-val="Culture">Culture</button>
+                        <button class="tag-pill active" data-category="interests" data-val="Food">Food</button>
+                        <button class="tag-pill" data-category="interests" data-val="Nature">Nature</button>
+                        <button class="tag-pill" data-category="interests" data-val="Photography">Photography</button>
+                        <button class="tag-pill" data-category="interests" data-val="Nightlife">Nightlife</button>
+                        <button class="tag-pill" data-category="interests" data-val="Local experiences">Local experiences</button>
+                      </div>
+                    </div>
+
+                    <!-- Travel Intent -->
+                    <div class="tag-group">
+                      <h4>TRAVEL INTENT</h4>
+                      <div class="tag-choices" id="choices-intent">
+                        <button class="tag-pill active" data-category="intent" data-val="Travel companion">Travel companion</button>
+                        <button class="tag-pill" data-category="intent" data-val="Meet locals">Meet locals</button>
+                        <button class="tag-pill" data-category="intent" data-val="Explore culture">Explore culture</button>
+                        <button class="tag-pill" data-category="intent" data-val="Group travel">Group travel</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="pref-footer">
+                    <span class="selected-counter" id="selected-tags-count">5 preferences selected</span>
+                    <button class="btn-primary" onclick="nextPrefStep()">Continue</button>
+                  </div>
+                </div>
+
+                <!-- STEP 2.2: Mode Selection (Traveler vs Local) + Destination Info -->
+                <div class="pref-step-view" id="pref-step-2">
+                  <h2>What are you doing?</h2>
+                  <p class="subtitle">Choose your travel mode for this trip.</p>
+
+                  <div class="mode-cards-grid">
+                    <!-- Traveling Card -->
+                    <div class="intent-card active" id="intent-traveler" onclick="selectIntentMode('traveler')">
+                      <div class="intent-icon">✈️</div>
+                      <div class="intent-details">
+                        <h3>I'm traveling</h3>
+                        <p>Find compatible people at my destination</p>
+                      </div>
+                      <div class="check-indicator">✓</div>
+                    </div>
+                    <!-- Local Card -->
+                    <div class="intent-card" id="intent-local" onclick="selectIntentMode('local')">
+                      <div class="intent-icon">🏠</div>
+                      <div class="intent-details">
+                        <h3>I'm a local</h3>
+                        <p>Meet travelers and share my local knowledge</p>
+                      </div>
+                      <div class="check-indicator">✓</div>
+                    </div>
+                  </div>
+
+                  <!-- Destination and Dates configuration form (for Traveler) -->
+                  <div class="pref-form-section" id="form-traveler-details">
+                    <div class="form-group" style="position: relative;">
+                      <label>Where are you going?</label>
+                      <input type="text" id="input-destination" value="Bali, Indonesia" autocomplete="off">
+                      <div class="suggestions-dropdown hidden" id="suggestions-destination"></div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="input-start-date" value="2026-12-12">
+                      </div>
+                      <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="input-end-date" value="2026-12-18">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Hosting details form (for Local) -->
+                  <div class="pref-form-section hidden" id="form-local-details">
+                    <div class="form-group" style="position: relative;">
+                      <label>Where are you hosting / showing people around?</label>
+                      <input type="text" id="input-local-dest" value="Bali, Indonesia" autocomplete="off">
+                      <div class="suggestions-dropdown hidden" id="suggestions-local"></div>
+                    </div>
+                    <div class="form-group">
+                      <label>I can help with (Select all):</label>
+                      <div class="help-checkboxes">
+                        <label class="help-box-pill"><input type="checkbox" checked value="Stay"> 🏠 Stay</label>
+                        <label class="help-box-pill"><input type="checkbox" checked value="Local food spots"> 🍜 Food spots</label>
+                        <label class="help-box-pill"><input type="checkbox" checked value="Hidden places"> 📍 Hidden places</label>
+                        <label class="help-box-pill"><input type="checkbox" checked value="City exploration"> 🚶 City exploration</label>
+                        <label class="help-box-pill"><input type="checkbox" checked value="Cultural experiences"> 🌏 Cultural experiences</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="pref-footer">
+                    <button class="btn-primary" onclick="completePreferences()">Complete Profile</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+
+            <!-- ================= SCREEN 3: TRAVELER DISCOVERY ================= -->
+            <div class="view" id="view-discovery">
+              <div class="discovery-header">
+                <div class="discovery-info">
+                  <h3 id="discovery-dest-header"><span class="header-flag">🇮🇩</span> Bali</h3>
+                  <span class="discovery-dates-sub" id="discovery-dates-header">Dec 12 – Dec 18</span>
+                </div>
+                <div class="discovery-actions">
+                  <span class="badge-premium">Premium+</span>
+                  <button class="btn-icon-header" onclick="switchView('view-preferences')">
+                    <!-- Filter icon -->
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Card Stack viewport -->
+              <div class="card-stack-container" id="card-stack">
+                
+                <!-- Discovery Cards will be generated dynamically by JS. Underneath is a placeholder of the stack -->
+
+              </div>
+
+              <!-- Desktop-style floating navigation overlay in case card stack is empty -->
+              <div class="no-more-cards hidden" id="empty-stack-placeholder">
+                <div class="empty-emoji">🌍</div>
+                <h3>No more travelers nearby</h3>
+                <p>Try expanding your travel dates or modifying your style preferences.</p>
+                <button class="btn-secondary" onclick="resetCardStack()">Refresh Feed</button>
+              </div>
+
+              <!-- Swipe Control Action Buttons -->
+              <div class="discovery-controls">
+                <button class="control-btn btn-skip" id="btn-skip" onclick="handleBtnAction('skip')">
+                  <!-- X icon -->
+                  <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+                <button class="control-btn btn-connect" id="btn-connect" onclick="handleBtnAction('connect')">
+                  <!-- Connect check icon -->
+                  <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </button>
+              </div>
+
+              <div class="matches-indicator-label">
+                <span id="stack-count-label">2 matches found for your trip</span>
+              </div>
+            </div>
+
+
+            <!-- ================= SCREEN 4: LOCAL HOST PROFILE ================= -->
+            <div class="view" id="view-local-profile">
+              <div class="local-header view-header-nav">
+                <button class="back-btn" onclick="backToDiscovery()">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <h3>Local Host</h3>
+                <div class="placeholder-spacer"></div>
+              </div>
+
+              <div class="scroll-content local-profile-scroll">
+                
+                <!-- Media Slideshow container -->
+                <div class="slideshow-container">
+                  <div class="slide-image-wrapper">
+                    <img src="assets/arjun_profile.jpg" alt="Arjun Host" id="host-main-img">
+                  </div>
+                  <!-- Mini indicators -->
+                  <div class="slide-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                  </div>
+                </div>
+
+                <div class="profile-details-card">
+                  <div class="profile-main-info">
+                    <div class="name-age">
+                      <h2>Arjun, 30</h2>
+                      <span class="status-indicator">Active today</span>
+                    </div>
+                    <div class="profile-location">📍 Bali, Indonesia · Local Host</div>
+                  </div>
+
+                  <!-- Stats -->
+                  <div class="profile-stats-row">
+                    <div class="stat-box">
+                      <span class="stat-value">⭐ 4.8</span>
+                      <span class="stat-label">Rating</span>
+                    </div>
+                    <div class="stat-box">
+                      <span class="stat-value">12</span>
+                      <span class="stat-label">Successful connections</span>
+                    </div>
+                  </div>
+
+                  <hr class="profile-divider">
+
+                  <!-- Help options section -->
+                  <div class="help-section">
+                    <h3>I CAN HELP WITH:</h3>
+                    <div class="help-grid">
+                      <div class="help-item-badge text-verified">
+                        <span class="help-badge-icon">🏠</span>
+                        <div class="help-badge-text">
+                          <strong>Stay</strong>
+                          <span class="badge-status">Only if verified</span>
+                        </div>
+                      </div>
+                      <div class="help-item-badge">
+                        <span class="help-badge-icon">🍜</span>
+                        <div class="help-badge-text">
+                          <strong>Local food spots</strong>
+                          <span class="badge-status">Always available</span>
+                        </div>
+                      </div>
+                      <div class="help-item-badge">
+                        <span class="help-badge-icon">📍</span>
+                        <div class="help-badge-text">
+                          <strong>Hidden places</strong>
+                          <span class="badge-status">Always available</span>
+                        </div>
+                      </div>
+                      <div class="help-item-badge">
+                        <span class="help-badge-icon">🚶</span>
+                        <div class="help-badge-text">
+                          <strong>City exploration</strong>
+                          <span class="badge-status">Always available</span>
+                        </div>
+                      </div>
+                      <div class="help-item-badge">
+                        <span class="help-badge-icon">🌏</span>
+                        <div class="help-badge-text">
+                          <strong>Cultural experiences</strong>
+                          <span class="badge-status">Always available</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr class="profile-divider">
+
+                  <!-- Trust and Verification -->
+                  <div class="verification-section">
+                    <h3>TRUST & VERIFICATION</h3>
+                    <div class="trust-pill-list">
+                      <div class="trust-pill-item">
+                        <span class="check-circle">✓</span>
+                        <div class="trust-text">
+                          <strong>Identity verified</strong>
+                          <span>Government ID confirmed</span>
+                        </div>
+                      </div>
+                      <div class="trust-pill-item">
+                        <span class="check-circle">✓</span>
+                        <div class="trust-text">
+                          <strong>Phone verified</strong>
+                          <span>Active number</span>
+                        </div>
+                      </div>
+                      <div class="trust-pill-item">
+                        <span class="check-circle">✓</span>
+                        <div class="trust-text">
+                          <strong>Profile verified</strong>
+                          <span>Photo match confirmed</span>
+                        </div>
+                      </div>
+                      <div class="trust-pill-item">
+                        <span class="check-circle">✓</span>
+                        <div class="trust-text">
+                          <strong>Community feedback</strong>
+                          <span>Positive ratings</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- CTAs -->
+                  <div class="profile-action-ctas">
+                    <button class="btn-primary" onclick="triggerConnect('arjun')">Connect</button>
+                    <button class="btn-outline-text" onclick="showSafetyDialog()">View Safety Information</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+
+            <!-- ================= SCREEN 4.5: LOCAL HOST DASHBOARD (FREE MODE) ================= -->
+            <div class="view" id="view-local-dashboard">
+              <div class="local-header view-header-nav">
+                <button class="back-btn" onclick="switchView('view-home')">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <h3>Host Dashboard</h3>
+                <div class="placeholder-spacer"></div>
+              </div>
+
+              <div class="scroll-content local-profile-scroll">
+                <div class="host-dashboard-status">
+                  <div class="status-pill active">🟢 Active Local Host</div>
+                  <p id="local-status-text">Visible to travelers searching for Bali, Indonesia</p>
+                </div>
+
+                <div class="profile-details-card">
+                  <div class="profile-main-info" style="text-align: center; margin-bottom: 20px;">
+                    <img src="assets/user_avatar.jpg" alt="My Avatar" class="host-dashboard-avatar">
+                    <h2 style="font-family: var(--font-display); font-size: 1.35rem; margin-top: 8px;">Emily, 25 (You)</h2>
+                    <div class="profile-location" id="dashboard-location-text">📍 Bali, Indonesia · Local Host</div>
+                  </div>
+
+                  <hr class="profile-divider">
+
+                  <!-- Help options configured -->
+                  <div class="help-section">
+                    <h3>Your Hosting Services:</h3>
+                    <div class="help-grid" id="dashboard-help-list">
+                      <!-- Rendered dynamically based on checkboxes selected -->
+                    </div>
+                  </div>
+
+                  <hr class="profile-divider">
+
+                  <!-- Premium Upgrade Box -->
+                  <div class="premium-upgrade-card">
+                    <div class="premium-upgrade-header">
+                      <span class="gold-sparkle">✦</span>
+                      <h4>Tinder Travel Premium+</h4>
+                    </div>
+                    <p>Unlock active traveler search! Browse the global traveler network, select destinations, and contact travelers heading your way.</p>
+                    <button class="btn-primary btn-premium-upgrade" onclick="upgradeToPremiumPlus()">Upgrade & Discover Travelers</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- ================= SCREEN 5: COMPATIBILITY DETAIL ================= -->
+            <div class="view" id="view-compatibility">
+              <div class="compatibility-header view-header-nav">
+                <button class="back-btn" onclick="backToDiscovery()">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <h3>Your Travel Match</h3>
+                <div class="placeholder-spacer"></div>
+              </div>
+
+              <div class="scroll-content compatibility-scroll">
+                
+                <!-- Match circles / visual summary -->
+                <div class="compat-visual-card">
+                  <div class="compat-avatars-wrap">
+                    <div class="compat-avatar-frame user-frame">
+                      <img src="assets/user_avatar.jpg" alt="You">
+                    </div>
+                    <!-- Score Circle -->
+                    <div class="compat-score-circle">
+                      <svg viewBox="0 0 36 36" class="circular-chart-svg">
+                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="circle" stroke-dasharray="92, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      </svg>
+                      <div class="percentage-val" id="compat-score-pct">92%</div>
+                      <div class="percentage-label">compatible</div>
+                    </div>
+                    <div class="compat-avatar-frame partner-frame">
+                      <img src="assets/priya_profile.jpg" alt="Match" id="compat-partner-img">
+                    </div>
+                  </div>
+                  <h2 id="compat-title-name">Priya, 28</h2>
+                  <p class="compat-subtitle" id="compat-route-text">Bengaluru → Bali · Dec 12–18</p>
+                </div>
+
+                <!-- Why you match section -->
+                <div class="compat-section-card">
+                  <h3>WHY YOU MATCH</h3>
+                  <ul class="compat-points-list" id="compat-why-points">
+                    <li><span class="compat-icon-bullet">📍</span> Same destination (Bali, Indonesia)</li>
+                    <li><span class="compat-icon-bullet">📅</span> Same travel dates (Dec 12 - Dec 18)</li>
+                    <li><span class="compat-icon-bullet">💰</span> Similar budget (Budget/Economy)</li>
+                    <li><span class="compat-icon-bullet">🌏</span> Both love cultural experiences</li>
+                    <li><span class="compat-icon-bullet">🍜</span> Both enjoy local food</li>
+                    <li><span class="compat-icon-bullet">🥾</span> Similar activity level (Adventure-oriented)</li>
+                  </ul>
+                </div>
+
+                <!-- Travel style side-by-side comparison -->
+                <div class="compat-section-card">
+                  <h3>TRAVEL STYLE COMPARISON</h3>
+                  <div class="compare-grid">
+                    <!-- Column User -->
+                    <div class="compare-col">
+                      <div class="compare-col-header">You</div>
+                      <div class="compare-tag-list" id="compare-user-tags">
+                        <span class="tag-pill budget-tag">Budget</span>
+                        <span class="tag-pill culture-tag">Culture</span>
+                        <span class="tag-pill food-tag">Food</span>
+                        <span class="tag-pill adventure-tag">Adventure</span>
+                      </div>
+                    </div>
+                    <!-- Column Them -->
+                    <div class="compare-col">
+                      <div class="compare-col-header" id="compare-partner-label">Priya</div>
+                      <div class="compare-tag-list" id="compare-partner-tags">
+                        <span class="tag-pill budget-tag">Budget</span>
+                        <span class="tag-pill culture-tag">Culture</span>
+                        <span class="tag-pill food-tag">Food</span>
+                        <span class="tag-pill photography-tag">Photography</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="compare-legend">
+                    <span class="legend-color legend-shared"></span> Shared (3 in common)
+                    <span class="legend-color legend-unique"></span> Unique
+                  </div>
+                </div>
+
+                <!-- Summary text -->
+                <div class="compat-summary-box">
+                  <p id="compat-summary-desc">"You both prefer exploring local places, trying local food, and keeping the trip flexible."</p>
+                  <span class="compat-disclaimer-text">Note: Compatibility scores represent travel styling similarities, not dating matchmaking metrics.</span>
+                </div>
+
+                <!-- CTA -->
+                <div class="compat-cta-sticky">
+                  <button class="btn-primary" onclick="triggerConnectFromCompat()">Connect</button>
+                </div>
+
+              </div>
+            </div>
+
+
+            <!-- ================= SCREEN 6: CONNECTION / CHAT VIEW ================= -->
+            <div class="view" id="view-chat">
+              <!-- Chat Header -->
+              <div class="chat-header">
+                <button class="back-btn" onclick="switchView('view-discovery')">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <div class="chat-title-user">
+                  <img src="assets/priya_profile.jpg" alt="Partner Avatar" class="chat-partner-avatar" id="chat-header-avatar">
+                  <div class="chat-user-details">
+                    <h3 id="chat-header-name">Priya</h3>
+                    <span class="chat-subtext" id="chat-header-subtext">Matched for Bali - Dec 12 - 18 ✈️</span>
+                  </div>
+                </div>
+                <!-- Safety Shield Button -->
+                <button class="safety-shield-btn" onclick="toggleSafetyPanel()" title="Safety Options">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="var(--tinder-pink)" stroke-width="2.2" fill="none">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Chat Message Area -->
+              <div class="chat-message-viewport" id="chat-messages-container">
+                <!-- Matches Header card -->
+                <div class="chat-system-badge" id="chat-match-system-badge">
+                  <p>✈️ You matched for Bali same week · similar travel interests</p>
+                </div>
+
+                <!-- Message bubble logs (will load dynamically) -->
+                <div class="chat-bubbles-flow" id="chat-flow-area">
+                  <!-- Dynamically populated -->
+                </div>
+
+                <!-- Typing indicator -->
+                <div class="typing-indicator-wrap hidden" id="typing-indicator">
+                  <div class="typing-bubble">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom Inputs / Starters panel -->
+              <div class="chat-inputs-panel">
+                
+                <!-- Suggested Icebreaker Starters -->
+                <div class="suggested-starters-scroll" id="suggested-starters-pills">
+                  <button class="icebreaker-pill" onclick="sendSuggestedStarter(this)">"What are you planning to explore in Bali?"</button>
+                  <button class="icebreaker-pill" onclick="sendSuggestedStarter(this)">"Are you traveling solo?"</button>
+                  <button class="icebreaker-pill" onclick="sendSuggestedStarter(this)">"Want to explore a local food spot together?"</button>
+                </div>
+
+                <!-- Chat entry controls -->
+                <div class="chat-entry-box">
+                  <input type="text" placeholder="Message Priya..." id="input-chat-text" onkeypress="handleChatEnter(event)">
+                  <button class="btn-send-message" onclick="sendChatMessage()">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+                  </button>
+                </div>
+
+                <!-- Safe messaging banner -->
+                <div class="safe-text-reminder">
+                  <span>Keep communication inside Tinder to stay protected.</span>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- ================= SCREEN 6.5: CHAT SAFETY PANEL (SLIDE UP/MODAL) ================= -->
+            <div class="safety-panel-overlay hidden" id="safety-panel">
+              <div class="safety-panel-sheet">
+                <div class="sheet-drag-handle"></div>
+                
+                <div class="sheet-header">
+                  <h3>Travel Safety & Security</h3>
+                  <button class="btn-close-sheet" onclick="toggleSafetyPanel()">✕</button>
+                </div>
+
+                <div class="sheet-body">
+                  <div class="safety-guideline-card">
+                    <h4>Before meeting someone:</h4>
+                    <ul class="safety-checklist">
+                      <li>
+                        <span class="check-tick">✓</span>
+                        <div class="checklist-desc">
+                          <strong>Meet in a public place</strong>
+                          <span>Choose busy cafes, tourist spots, or active beaches. Never meet in private hotels/rentals initially.</span>
+                        </div>
+                      </li>
+                      <li>
+                        <span class="check-tick">✓</span>
+                        <div class="checklist-desc">
+                          <strong>Keep communication inside Tinder</strong>
+                          <span>Using Tinder's chat protects you. Do not share social media handles or phone numbers immediately.</span>
+                        </div>
+                      </li>
+                      <li>
+                        <span class="check-tick">✓</span>
+                        <div class="checklist-desc">
+                          <strong>Share your plans with someone you trust</strong>
+                          <span>Send your travel buddy's name, host profile, and your live location to a friend back home.</span>
+                        </div>
+                      </li>
+                      <li>
+                        <span class="check-tick">✓</span>
+                        <div class="checklist-desc">
+                          <strong>Report suspicious behavior</strong>
+                          <span>If anyone asks for money, sells packages, or acts inappropriately, report them instantly.</span>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="safety-action-buttons">
+                    <button class="btn-danger-outline" onclick="triggerSafetyAction('report')">Report User</button>
+                    <button class="btn-danger-outline" onclick="triggerSafetyAction('block')">Block User</button>
+                    <button class="btn-secondary" onclick="triggerSafetyAction('safety-center')">Safety Center</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- ================= SCREEN MATCH OVERLAY (POPUP) ================= -->
+            <div class="match-overlay-screen hidden" id="match-overlay">
+              <div class="confetti-canvas-container" id="confetti-container"></div>
+              
+              <div class="match-alert-box">
+                <div class="match-heart-pulse">✈️</div>
+                <h1>It's a Travel Match!</h1>
+                <p id="match-alert-desc">You and Priya both want to travel to Bali!</p>
+                
+                <div class="match-avatar-intersection">
+                  <div class="overlay-avatar self-avatar">
+                    <img src="assets/user_avatar.jpg" alt="You">
+                  </div>
+                  <div class="overlay-avatar partner-avatar">
+                    <img src="assets/priya_profile.jpg" alt="Match" id="match-popup-avatar">
+                  </div>
+                </div>
+
+                <div class="match-overlay-actions">
+                  <button class="btn-primary" onclick="goToMatchedChat()">Send a Message</button>
+                  <button class="btn-outline-white" onclick="dismissMatchOverlay()">Keep Exploring</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile View placeholder -->
+            <div class="view" id="view-profile-setup">
+              <div class="local-header view-header-nav">
+                <button class="back-btn" onclick="switchView('view-home')">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <h3>My Travel Profile</h3>
+                <div class="placeholder-spacer"></div>
+              </div>
+              <div class="scroll-content profile-page-scroll">
+                <div class="user-profile-hero">
+                  <img src="assets/user_avatar.jpg" alt="My Profile">
+                  <h2>Emily, 25</h2>
+                  <span>📍 Bengaluru, India</span>
+                  <div class="profile-membership-badge premium-plus" id="profile-membership-badge">Premium+</div>
+                </div>
+                <div class="profile-list-links">
+                  <div class="profile-link-item" onclick="switchView('view-preferences')">
+                    <span class="link-icon">⚙️</span>
+                    <div class="link-label">
+                      <strong>Edit Travel Preferences</strong>
+                      <span>Modify budget, style, and destination settings</span>
+                    </div>
+                    <span class="arrow-r">›</span>
+                  </div>
+                  <div class="profile-link-item" onclick="alert('Account Verification is set to verified in simulation.')">
+                    <span class="link-icon">🔒</span>
+                    <div class="link-label">
+                      <strong>Account Verification</strong>
+                      <span>Completed — government ID confirmed</span>
+                    </div>
+                    <span class="arrow-r">›</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Navigation Bar -->
+          <div class="bottom-navigation-bar" id="bottom-nav">
+            <button class="nav-tab-btn" id="nav-btn-dating" onclick="switchTab('dating')">
+              <span class="nav-icon">❤️</span>
+              <span class="nav-text">Dating</span>
+            </button>
+            <button class="nav-tab-btn active" id="nav-btn-travel" onclick="switchTab('travel')">
+              <span class="nav-icon">✈️</span>
+              <span class="nav-text">Travel</span>
+            </button>
+            <button class="nav-tab-btn" id="nav-btn-messages" onclick="switchTab('messages')">
+              <span class="nav-icon" style="position: relative;">
+                💬
+                <span class="unread-badge hidden" id="chat-unread-dot"></span>
+              </span>
+              <span class="nav-text">Messages</span>
+            </button>
+            <button class="nav-tab-btn" id="nav-btn-profile" onclick="switchTab('profile')">
+              <img src="assets/user_avatar.jpg" alt="Profile" class="nav-avatar-img">
+              <span class="nav-text">Profile</span>
+            </button>
+          </div>
+
+          <!-- iOS Home Indicator -->
+          <div class="home-indicator"></div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Main JavaScript File -->
+  <script src="app.js"></script>
+</body>
+</html>
