@@ -9,11 +9,18 @@ const destinationList = [
 
 // --- APPLICATION STATE ---
 const appState = {
-  activeView: 'view-home',
+  isLoggedIn: false,
+  activeView: 'view-login',
   datingMode: 'dating', // 'travel' or 'dating' (starts on dating for free tier simulation)
   hasGold: false,       // simulates free user gate; tapping Travel triggers soft upsell
   pendingDest: '',
   profileCompleted: false,
+  user: {
+    name: 'Emily',
+    age: 25,
+    city: 'Bengaluru, India',
+    avatar: 'assets/user_avatar.jpg'
+  },
   preferences: {
     tags: ['Budget', 'Adventure', 'Culture', 'Food', 'Travel companion'],
     mode: 'traveler', // 'traveler' or 'local'
@@ -736,9 +743,36 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize initial mode (e.g. Dating mode for free gate simulation)
   switchMode(appState.datingMode);
 
-  // Render card stack initially
-  renderCardStack();
+  // Setup OTP inputs auto-advance
+  setupOtpInputs();
+
+  // If not logged in, ensure login view is active and bottom nav hidden
+  if (!appState.isLoggedIn) {
+    switchView('view-login');
+  } else {
+    renderCardStack();
+  }
 });
+
+// Setup 4-digit OTP auto-advancing inputs
+function setupOtpInputs() {
+  const digits = document.querySelectorAll('.otp-digit');
+  digits.forEach((digit, index) => {
+    digit.addEventListener('input', (e) => {
+      if (e.target.value.length === 1 && index < digits.length - 1) {
+        digits[index + 1].focus();
+      }
+    });
+
+    digit.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !e.target.value && index > 0) {
+        digits[index - 1].focus();
+      } else if (e.key === 'Enter') {
+        verifyPhoneOtp();
+      }
+    });
+  });
+}
 
 // --- CORE NAVIGATION (routing) ---
 function switchView(viewId) {
@@ -760,6 +794,11 @@ function switchView(viewId) {
 }
 
 function switchTab(tabId) {
+  if (!appState.isLoggedIn) {
+    switchView('view-login');
+    return;
+  }
+
   if (tabId === 'dating') {
     switchMode('dating');
     switchView('view-home');
@@ -788,6 +827,14 @@ function switchTab(tabId) {
 }
 
 function syncBottomNav(viewId) {
+  const bottomNav = document.getElementById('bottom-nav');
+  if (viewId === 'view-login' || !appState.isLoggedIn) {
+    if (bottomNav) bottomNav.classList.add('hidden');
+    return;
+  } else {
+    if (bottomNav) bottomNav.classList.remove('hidden');
+  }
+
   // Remove active from all nav buttons
   document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
 
@@ -1830,4 +1877,67 @@ function updateMembershipUI() {
       discoveryBadge.textContent = '✦ GOLD';
     }
   }
+}
+
+// --- AUTHENTICATION & LOGIN FLOW HANDLERS ---
+function handleDemoLogin() {
+  appState.isLoggedIn = true;
+  switchView('view-home');
+  renderCardStack();
+}
+
+function handleSocialLogin(provider) {
+  appState.isLoggedIn = true;
+  switchView('view-home');
+  renderCardStack();
+}
+
+function openPhoneAuthModal() {
+  const modal = document.getElementById('phone-auth-modal');
+  if (modal) {
+    document.getElementById('phone-step-number').classList.add('active');
+    document.getElementById('phone-step-otp').classList.remove('active');
+    document.getElementById('phone-modal-title').textContent = 'Enter your phone number';
+    document.getElementById('phone-modal-subtitle').textContent = "We'll send you a verification code to log in.";
+    modal.classList.remove('hidden');
+    
+    setTimeout(() => {
+      const phoneInput = document.getElementById('input-phone-number');
+      if (phoneInput) phoneInput.focus();
+    }, 150);
+  }
+}
+
+function closePhoneAuthModal() {
+  const modal = document.getElementById('phone-auth-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+  }
+}
+
+function sendPhoneVerificationCode() {
+  const phone = document.getElementById('input-phone-number').value.trim() || '(555) 789-2026';
+  document.getElementById('phone-step-number').classList.remove('active');
+  document.getElementById('phone-step-otp').classList.add('active');
+  document.getElementById('phone-modal-title').textContent = 'Enter 4-digit code';
+  document.getElementById('phone-modal-subtitle').textContent = `We sent a verification code to ${phone}`;
+  
+  setTimeout(() => {
+    const firstDigit = document.querySelector('.otp-digit');
+    if (firstDigit) firstDigit.focus();
+  }, 150);
+}
+
+function verifyPhoneOtp() {
+  appState.isLoggedIn = true;
+  closePhoneAuthModal();
+  switchView('view-home');
+  renderCardStack();
+}
+
+function handleLogout() {
+  appState.isLoggedIn = false;
+  appState.profileCompleted = false;
+  appState.hasMatchedWithPriya = false;
+  switchView('view-login');
 }

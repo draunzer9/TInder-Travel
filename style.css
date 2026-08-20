@@ -2845,3 +2845,336 @@ body {
 .btn-text-dismiss:hover {
   color: #FFFFFF;
 }
+
+/* ================= LOGIN SCREEN STYLES ================= */
+#view-login {
+  background: linear-gradient(180deg, #1C1924 0%, #110E18 50%, #0A0810 100%);
+  color: #FFFFFF;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  display: none;
+  flex-direction: column;
+}
+
+#view-login.active {
+  display: flex !important;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 32px 22px 24px 22px;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow-y: auto;
+}
+
+.login-header-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.login-logo-flame {
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 20px rgba(254, 60, 114, 0.45));
+  animation: flame-pulse 3s infinite ease-in-out;
+}
+
+@keyframes flame-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(254, 60, 114, 0.45)); }
+  50% { transform: scale(1.06); filter: drop-shadow(0 0 30px rgba(254, 60, 114, 0.75)); }
+}
+
+.login-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login-title-sub {
+  font-weight: 300;
+  background: linear-gradient(135deg, #FE3C72 0%, #FF655B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.login-tagline {
+  font-size: 0.92rem;
+  color: #94A3B8;
+  margin-top: 6px;
+  font-weight: 400;
+}
+
+.login-auth-box {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  width: 100%;
+  margin: 16px 0;
+}
+
+.btn-auth-demo {
+  background: linear-gradient(135deg, #FE3C72 0%, #FF655B 100%);
+  border: none;
+  border-radius: 28px;
+  padding: 13px 18px;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(254, 60, 114, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-auth-demo:active {
+  transform: scale(0.97);
+}
+
+.demo-bolt {
+  font-size: 1.4rem;
+}
+
+.demo-auth-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.demo-auth-text strong {
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.demo-auth-text span {
+  font-size: 0.7rem;
+  opacity: 0.9;
+}
+
+.login-divider-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2px 0;
+  color: #64748B;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+}
+
+.login-divider-row::before, .login-divider-row::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 10px;
+}
+
+.btn-auth-service {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 26px;
+  padding: 12px 18px;
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-size: 0.86rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-auth-service:active {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(0.98);
+}
+
+.btn-auth-service.btn-google {
+  background: #FFFFFF;
+  color: #1E293B;
+  border: none;
+}
+
+.btn-auth-service.btn-google:active {
+  background: #F1F5F9;
+}
+
+.btn-auth-service.btn-apple {
+  background: #000000;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.btn-auth-service.btn-phone {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.login-footer {
+  font-size: 0.68rem;
+  color: #64748B;
+  line-height: 1.4;
+  max-width: 90%;
+}
+
+.login-footer a {
+  color: #94A3B8;
+  text-decoration: underline;
+}
+
+/* PHONE OTP MODAL STYLES */
+.phone-auth-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  animation: fade-in 0.25s ease;
+}
+
+.phone-auth-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.phone-auth-sheet {
+  position: relative;
+  background: #1E293B;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px 24px 0 0;
+  padding: 20px 24px 34px 24px;
+  color: #FFFFFF;
+  animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.phone-auth-handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  margin: 0 auto 16px auto;
+}
+
+.phone-auth-header h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.phone-auth-header p {
+  font-size: 0.8rem;
+  color: #94A3B8;
+  margin-bottom: 18px;
+}
+
+.phone-step-view {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.phone-step-view.active {
+  display: flex;
+}
+
+.phone-input-group {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 4px 14px;
+  gap: 10px;
+}
+
+.country-code {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #E2E8F0;
+}
+
+.phone-input-group input {
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  padding: 8px 0;
+}
+
+.otp-inputs-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.otp-digit {
+  width: 48px;
+  height: 54px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-align: center;
+  outline: none;
+}
+
+.otp-digit:focus {
+  border-color: var(--tinder-pink);
+  box-shadow: 0 0 10px rgba(254, 60, 114, 0.3);
+}
+
+.otp-resend-text {
+  font-size: 0.78rem;
+  color: #94A3B8;
+  text-align: center;
+}
+
+.otp-resend-text span {
+  color: var(--tinder-pink);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-phone-submit {
+  width: 100%;
+  padding: 13px;
+  font-size: 0.95rem;
+  border-radius: 24px;
+}
