@@ -27,60 +27,694 @@ const appState = {
   hasMatchedWithPriya: false
 };
 
-// --- DATA: Simulated Profiles in Feed ---
-const simulatedProfiles = [
-  {
-    id: 'priya',
-    name: 'Priya',
-    age: 28,
-    isLocal: false,
-    matchPercent: 92,
-    origin: 'Bengaluru',
-    destination: 'Bali',
-    dates: 'Dec 12 – 18',
-    image: 'assets/priya_profile.jpg',
-    tags: ['Budget', 'Culture', 'Food', 'Adventure'],
-    whyMatch: [
-      'Same destination (Bali, Indonesia)',
-      'Same travel dates (Dec 12 - Dec 18)',
-      'Similar budget (Budget/Economy)',
-      'Both enjoy local food',
-      'Both prefer cultural experiences'
-    ],
-    summary: 'You both prefer exploring local places, trying local food, and keeping the trip flexible.'
-  },
-  {
-    id: 'arjun',
-    name: 'Arjun',
-    age: 30,
-    isLocal: true,
-    rating: 4.8,
-    connections: 12,
-    location: 'Bali, Indonesia',
-    image: 'assets/arjun_profile.jpg',
-    tags: ['Local Host', 'Hidden Places', 'Verified Stays'],
-    helpItems: ['Stay', 'Local food spots', 'Hidden places', 'City exploration', 'Cultural experiences'],
-    verified: true
-  },
-  {
-    id: 'sarah',
-    name: 'Sarah',
-    age: 26,
-    isLocal: false,
-    matchPercent: 84,
-    origin: 'London',
-    destination: 'Bali',
-    dates: 'Dec 11 – 19',
-    image: 'assets/user_avatar.jpg', // reusable for placeholder
-    tags: ['Relaxed', 'Nature', 'Photography'],
-    whyMatch: [
-      'Same destination (Bali, Indonesia)',
-      'Overlapping dates (Dec 11 - Dec 19)',
-      'Both enjoy nature photography'
-    ],
-    summary: 'Sarah loves photography and relaxing in nature. Great if you want a slow-paced nature day.'
-  }
-];
+// --- DATA: Destination-specific Profiles Database (8 profiles per destination) ---
+const destinationProfiles = {
+  Bali: [
+    {
+      id: 'priya',
+      name: 'Priya',
+      age: 28,
+      isLocal: false,
+      matchPercent: 92,
+      origin: 'Bengaluru',
+      destination: 'Bali',
+      dates: 'Dec 12 – 18',
+      image: 'assets/priya_profile.jpg',
+      tags: ['Budget', 'Culture', 'Food', 'Adventure'],
+      whyMatch: [
+        'Same destination (Bali, Indonesia)',
+        'Same travel dates (Dec 12 - Dec 18)',
+        'Similar budget (Budget/Economy)',
+        'Both enjoy local food',
+        'Both prefer cultural experiences'
+      ],
+      summary: 'You both prefer exploring local places, trying authentic warung food, and keeping the trip flexible.'
+    },
+    {
+      id: 'arjun',
+      name: 'Arjun',
+      age: 30,
+      isLocal: true,
+      rating: 4.8,
+      connections: 12,
+      location: 'Canggu & Ubud, Bali',
+      image: 'assets/arjun_profile.jpg',
+      tags: ['Local Host', 'Hidden Places', 'Verified Stays', 'Surfing'],
+      helpItems: ['Stay', 'Local food spots', 'Hidden places', 'City exploration', 'Cultural experiences'],
+      verified: true
+    },
+    {
+      id: 'sarah',
+      name: 'Sarah',
+      age: 26,
+      isLocal: false,
+      matchPercent: 88,
+      origin: 'London',
+      destination: 'Bali',
+      dates: 'Dec 11 – 19',
+      image: 'assets/user_avatar.jpg',
+      tags: ['Relaxed', 'Nature', 'Photography', 'Cafes'],
+      whyMatch: [
+        'Same destination (Bali, Indonesia)',
+        'Overlapping dates (Dec 11 - Dec 19)',
+        'Both enjoy nature photography',
+        'Looking for cafe hopping buddy'
+      ],
+      summary: 'Sarah loves photography, serene waterfalls, and relaxing at Ubud cafes. Great for scenic day trips.'
+    },
+    {
+      id: 'marcus',
+      name: 'Marcus',
+      age: 29,
+      isLocal: false,
+      matchPercent: 85,
+      origin: 'Berlin',
+      destination: 'Bali',
+      dates: 'Dec 12 – 20',
+      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=80',
+      tags: ['Adventure', 'Scuba Diving', 'Scooters', 'Budget'],
+      whyMatch: [
+        'Same destination (Bali, Indonesia)',
+        'Overlapping dates (Dec 12 - Dec 18)',
+        'Both want outdoor adventures & hiking'
+      ],
+      summary: 'Looking to split scooter rentals for day trips around Nusa Penida and hike Mount Batur for sunrise.'
+    },
+    {
+      id: 'wayan',
+      name: 'Wayan Ketut',
+      age: 34,
+      isLocal: true,
+      rating: 4.9,
+      connections: 28,
+      location: 'Ubud, Bali',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80',
+      tags: ['Local Host', 'Temple Tours', 'Cooking Classes', 'Secret Waterfalls'],
+      helpItems: ['Hidden places', 'Cultural experiences', 'Local food spots'],
+      verified: true
+    },
+    {
+      id: 'chloe',
+      name: 'Chloe',
+      age: 25,
+      isLocal: false,
+      matchPercent: 91,
+      origin: 'Melbourne',
+      destination: 'Bali',
+      dates: 'Dec 12 – 17',
+      image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80',
+      tags: ['Solo', 'Food', 'Culture', 'Yoga'],
+      whyMatch: [
+        'Same destination (Bali, Indonesia)',
+        'Identical travel dates (Dec 12 - Dec 17)',
+        'Both foodies & cultural explorers'
+      ],
+      summary: 'Solo traveler seeking someone to share authentic Balinese food feasts and morning temple walks.'
+    },
+    {
+      id: 'lucas',
+      name: 'Lucas',
+      age: 27,
+      isLocal: false,
+      matchPercent: 79,
+      origin: 'Toronto',
+      destination: 'Bali',
+      dates: 'Dec 14 – 22',
+      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=80',
+      tags: ['Surfing', 'Nightlife', 'Hostels', 'Adventure'],
+      whyMatch: [
+        'Same destination (Bali, Indonesia)',
+        'Overlapping dates (Dec 14 - Dec 18)',
+        'Adventure & active travel style'
+      ],
+      summary: 'Catching morning waves in Uluwatu, sunset beach bars in Seminyak, and exploring lively night markets.'
+    },
+    {
+      id: 'amina',
+      name: 'Amina',
+      age: 31,
+      isLocal: false,
+      matchPercent: 86,
+      origin: 'Dubai',
+      destination: 'Bali',
+      dates: 'Dec 10 – 18',
+      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80',
+      tags: ['Premium', 'Wellness', 'Spas', 'Photography'],
+      whyMatch: [
+        'Same destination (Bali, Indonesia)',
+        'Overlapping dates (Dec 12 - Dec 18)',
+        'Both value safety, photography, & wellness'
+      ],
+      summary: 'Looking for a travel buddy to check out jungle day clubs, infinity pools, and serene wellness retreats.'
+    }
+  ],
+  Tokyo: [
+    {
+      id: 'priya',
+      name: 'Priya',
+      age: 28,
+      isLocal: false,
+      matchPercent: 94,
+      origin: 'Bengaluru',
+      destination: 'Tokyo',
+      dates: 'Dec 12 – 18',
+      image: 'assets/tokyo_priya.jpg',
+      tags: ['Food', 'Anime & Pop Culture', 'Culture', 'Solo'],
+      whyMatch: [
+        'Same destination (Tokyo, Japan)',
+        'Same travel dates (Dec 12 - Dec 18)',
+        'Both want ramen & izakaya food crawls',
+        'Both prioritize cultural exploration'
+      ],
+      summary: 'Wants to explore hidden alleyway izakayas in Shinjuku, digital art exhibits, and vintage shops in Shimokitazawa.'
+    },
+    {
+      id: 'kenji',
+      name: 'Kenji',
+      age: 31,
+      isLocal: true,
+      rating: 4.9,
+      connections: 19,
+      location: 'Shibuya & Asakusa, Tokyo',
+      image: 'assets/tokyo_host.jpg',
+      tags: ['Local Host', 'Hidden Izakayas', 'Night Walks', 'Language Exchange'],
+      helpItems: ['Local food spots', 'Hidden places', 'City exploration', 'Cultural experiences'],
+      verified: true
+    },
+    {
+      id: 'yuki',
+      name: 'Yuki',
+      age: 24,
+      isLocal: false,
+      matchPercent: 89,
+      origin: 'Osaka',
+      destination: 'Tokyo',
+      dates: 'Dec 13 – 17',
+      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80',
+      tags: ['Foodie', 'Art Museums', 'Shopping', 'Photography'],
+      whyMatch: [
+        'Same destination (Tokyo, Japan)',
+        'Overlapping dates (Dec 13 - Dec 17)',
+        'Both love Japanese gastronomy & digital art'
+      ],
+      summary: 'Visiting Tokyo for teamLab Planets, art galleries in Roppongi, and artisanal matcha dessert cafes.'
+    },
+    {
+      id: 'david',
+      name: 'David',
+      age: 29,
+      isLocal: false,
+      matchPercent: 83,
+      origin: 'San Francisco',
+      destination: 'Tokyo',
+      dates: 'Dec 10 – 19',
+      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=80',
+      tags: ['Tech & Arcades', 'Street Photography', 'Solo', 'Budget'],
+      whyMatch: [
+        'Same destination (Tokyo, Japan)',
+        'Overlapping dates (Dec 12 - Dec 18)',
+        'Night photography & Akihabara arcade culture'
+      ],
+      summary: 'Tech enthusiast looking to wander neon-lit alleyways, play retro arcade games, and snap cyberpunk night cityscapes.'
+    },
+    {
+      id: 'haruto',
+      name: 'Haruto',
+      age: 28,
+      isLocal: true,
+      rating: 4.8,
+      connections: 15,
+      location: 'Roppongi & Ginza, Tokyo',
+      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=80',
+      tags: ['Local Host', 'Cocktail Bars', 'Art Galleries', 'Verified Stays'],
+      helpItems: ['Stay', 'Local food spots', 'Hidden places'],
+      verified: true
+    },
+    {
+      id: 'camille',
+      name: 'Camille',
+      age: 27,
+      isLocal: false,
+      matchPercent: 90,
+      origin: 'Montreal',
+      destination: 'Tokyo',
+      dates: 'Dec 12 – 20',
+      image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&auto=format&fit=crop&q=80',
+      tags: ['Culture', 'Food', 'Shrines', 'Relaxed'],
+      whyMatch: [
+        'Same destination (Tokyo, Japan)',
+        'Same travel dates (Dec 12 - Dec 18)',
+        'Both value historical landmarks & quiet gardens'
+      ],
+      summary: 'Peaceful morning shrine visits in Yanaka followed by cozy specialty kissaten coffee houses.'
+    },
+    {
+      id: 'jin',
+      name: 'Jin',
+      age: 26,
+      isLocal: false,
+      matchPercent: 85,
+      origin: 'Seoul',
+      destination: 'Tokyo',
+      dates: 'Dec 14 – 18',
+      image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80',
+      tags: ['Fashion', 'Street Food', 'Nightlife', 'Companion'],
+      whyMatch: [
+        'Same destination (Tokyo, Japan)',
+        'Overlapping dates (Dec 14 - Dec 18)',
+        'Shared interests in thrift fashion & streetwear'
+      ],
+      summary: 'Exploring Harajuku thrift markets, Daikanyama boutiques, and late-night ramen joints.'
+    },
+    {
+      id: 'sophia',
+      name: 'Sophia',
+      age: 30,
+      isLocal: false,
+      matchPercent: 87,
+      origin: 'London',
+      destination: 'Tokyo',
+      dates: 'Dec 11 – 18',
+      image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80',
+      tags: ['Premium', 'Onsens', 'Fine Dining', 'Culture'],
+      whyMatch: [
+        'Same destination (Tokyo, Japan)',
+        'Overlapping dates (Dec 12 - Dec 18)',
+        'High compatibility on scenic day trips'
+      ],
+      summary: 'Planning a day trip to Kamakura temples and Mt. Fuji viewpoints with traditional kaiseki dining.'
+    }
+  ],
+  Paris: [
+    {
+      id: 'priya',
+      name: 'Priya',
+      age: 28,
+      isLocal: false,
+      matchPercent: 95,
+      origin: 'Bengaluru',
+      destination: 'Paris',
+      dates: 'Dec 12 – 18',
+      image: 'assets/paris_priya.jpg',
+      tags: ['Museums', 'Pastries & Cafes', 'Architecture', 'Culture'],
+      whyMatch: [
+        'Same destination (Paris, France)',
+        'Same travel dates (Dec 12 - Dec 18)',
+        'Both art & museum lovers',
+        'Both enjoy leisurely bakery walks'
+      ],
+      summary: 'Looking for a museum buddy for the Louvre & Musée d\'Orsay, plus sharing fresh croissants in Le Marais.'
+    },
+    {
+      id: 'pierre',
+      name: 'Pierre',
+      age: 32,
+      isLocal: true,
+      rating: 4.9,
+      connections: 22,
+      location: 'Montmartre & Le Marais, Paris',
+      image: 'assets/paris_host.jpg',
+      tags: ['Local Host', 'Wine Bars', 'Architecture', 'Hidden Courtyards'],
+      helpItems: ['Local food spots', 'Hidden places', 'City exploration', 'Cultural experiences'],
+      verified: true
+    },
+    {
+      id: 'amelie',
+      name: 'Amélie',
+      age: 25,
+      isLocal: true,
+      rating: 4.8,
+      connections: 14,
+      location: 'Latin Quarter, Paris',
+      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80',
+      tags: ['Local Host', 'Bookshops', 'Vintage Flea Markets', 'Jazz Clubs'],
+      helpItems: ['Hidden places', 'Cultural experiences', 'Local food spots'],
+      verified: true
+    },
+    {
+      id: 'matteo',
+      name: 'Matteo',
+      age: 29,
+      isLocal: false,
+      matchPercent: 88,
+      origin: 'Milan',
+      destination: 'Paris',
+      dates: 'Dec 12 – 16',
+      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=80',
+      tags: ['Photography', 'Gastronomy', 'Art', 'Walking'],
+      whyMatch: [
+        'Same destination (Paris, France)',
+        'Overlapping dates (Dec 12 - Dec 16)',
+        'Both love scenic photography & architecture'
+      ],
+      summary: 'Golden hour strolls along the Seine, architectural photo walks, and finding authentic Parisian bistros.'
+    },
+    {
+      id: 'hannah',
+      name: 'Hannah',
+      age: 27,
+      isLocal: false,
+      matchPercent: 91,
+      origin: 'New York',
+      destination: 'Paris',
+      dates: 'Dec 11 – 18',
+      image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80',
+      tags: ['Solo', 'Fashion', 'Cafes', 'History'],
+      whyMatch: [
+        'Same destination (Paris, France)',
+        'Same dates (Dec 12 - Dec 18)',
+        'Shared solo travel style & cafe interests'
+      ],
+      summary: 'First time solo in Paris! Want someone to split cheese & charcuterie platters and take candid photos.'
+    },
+    {
+      id: 'julien',
+      name: 'Julien',
+      age: 35,
+      isLocal: true,
+      rating: 5.0,
+      connections: 31,
+      location: 'Saint-Germain-des-Prés, Paris',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80',
+      tags: ['Local Host', 'Verified Stays', 'History Walks', 'Wine Cellars'],
+      helpItems: ['Stay', 'Local food spots', 'Cultural experiences'],
+      verified: true
+    },
+    {
+      id: 'zoe',
+      name: 'Zoe',
+      age: 24,
+      isLocal: false,
+      matchPercent: 84,
+      origin: 'Sydney',
+      destination: 'Paris',
+      dates: 'Dec 13 – 19',
+      image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&auto=format&fit=crop&q=80',
+      tags: ['Budget', 'Hostels', 'Picnics', 'Nightlife'],
+      whyMatch: [
+        'Same destination (Paris, France)',
+        'Overlapping dates (Dec 13 - Dec 18)',
+        'Budget backpacker style & evening social vibe'
+      ],
+      summary: 'Eiffel Tower lawn picnics, cheap bakery bites, and exploring subterranean catacombs.'
+    },
+    {
+      id: 'oliver',
+      name: 'Oliver',
+      age: 30,
+      isLocal: false,
+      matchPercent: 86,
+      origin: 'Stockholm',
+      destination: 'Paris',
+      dates: 'Dec 12 – 17',
+      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=80',
+      tags: ['Modern Art', 'Biking', 'Bakeries', 'Relaxed'],
+      whyMatch: [
+        'Same destination (Paris, France)',
+        'Identical dates (Dec 12 - Dec 17)',
+        'Shared pace, cycling & modern art interests'
+      ],
+      summary: 'Renting Velib city bikes to explore green parks, Centre Pompidou, and quiet canals.'
+    }
+  ],
+  'New York': [
+    {
+      id: 'priya',
+      name: 'Priya',
+      age: 28,
+      isLocal: false,
+      matchPercent: 93,
+      origin: 'Bengaluru',
+      destination: 'New York',
+      dates: 'Dec 12 – 18',
+      image: 'assets/priya_profile.jpg',
+      tags: ['Broadway', 'Food', 'Culture', 'Museums'],
+      whyMatch: [
+        'Same destination (New York, USA)',
+        'Same travel dates (Dec 12 - Dec 18)',
+        'Both love theater & street food',
+        'Both prefer cultural experiences'
+      ],
+      summary: 'Looking to catch Broadway rush tickets, walk Central Park in winter, and explore Brooklyn food markets.'
+    },
+    {
+      id: 'john',
+      name: 'John',
+      age: 31,
+      isLocal: true,
+      rating: 4.9,
+      connections: 25,
+      location: 'Manhattan & Brooklyn, New York',
+      image: 'assets/arjun_profile.jpg',
+      tags: ['Local Host', 'Rooftops', 'Hidden Pizza', 'Jazz Clubs'],
+      helpItems: ['Local food spots', 'Hidden places', 'City exploration', 'Cultural experiences'],
+      verified: true
+    },
+    {
+      id: 'elena',
+      name: 'Elena',
+      age: 26,
+      isLocal: false,
+      matchPercent: 89,
+      origin: 'Madrid',
+      destination: 'New York',
+      dates: 'Dec 11 – 19',
+      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80',
+      tags: ['Art Galleries', 'Cafes', 'Solo', 'Photography'],
+      whyMatch: [
+        'Same destination (New York, USA)',
+        'Overlapping dates (Dec 11 - Dec 19)',
+        'Both love modern art & coffee walks'
+      ],
+      summary: 'Wandering Soho galleries, High Line park walks, and visiting The Met.'
+    },
+    {
+      id: 'liam_ny',
+      name: 'Liam',
+      age: 28,
+      isLocal: false,
+      matchPercent: 84,
+      origin: 'Dublin',
+      destination: 'New York',
+      dates: 'Dec 12 – 18',
+      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=80',
+      tags: ['Live Music', 'Comedy Clubs', 'Budget', 'Nightlife'],
+      whyMatch: [
+        'Same destination (New York, USA)',
+        'Identical travel dates (Dec 12 - Dec 18)',
+        'Shared interest in comedy & live music'
+      ],
+      summary: 'Hunting for underground comedy cellars in Greenwich Village and indie gigs.'
+    },
+    {
+      id: 'maya',
+      name: 'Maya',
+      age: 30,
+      isLocal: true,
+      rating: 4.8,
+      connections: 16,
+      location: 'Williamsburg, New York',
+      image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80',
+      tags: ['Local Host', 'Vintage Shopping', 'Bakeries', 'Flea Markets'],
+      helpItems: ['Hidden places', 'Local food spots', 'Cultural experiences'],
+      verified: true
+    },
+    {
+      id: 'alex',
+      name: 'Alex',
+      age: 27,
+      isLocal: false,
+      matchPercent: 90,
+      origin: 'Chicago',
+      destination: 'New York',
+      dates: 'Dec 13 – 18',
+      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=80',
+      tags: ['Architecture', 'Food', 'Skyscrapers', 'Walking'],
+      whyMatch: [
+        'Same destination (New York, USA)',
+        'Overlapping dates (Dec 13 - Dec 18)',
+        'Shared passion for architecture & street food'
+      ],
+      summary: 'Exploring historic art deco architecture and trying every iconic bagel spot.'
+    },
+    {
+      id: 'sam',
+      name: 'Sam',
+      age: 25,
+      isLocal: false,
+      matchPercent: 82,
+      origin: 'Austin',
+      destination: 'New York',
+      dates: 'Dec 14 – 20',
+      image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80',
+      tags: ['Budget', 'Hostels', 'Street Art', 'Photography'],
+      whyMatch: [
+        'Same destination (New York, USA)',
+        'Overlapping dates (Dec 14 - Dec 18)',
+        'Budget travel style & street photography'
+      ],
+      summary: 'Photographing Bushwick street art and finding the best slice under $3.'
+    },
+    {
+      id: 'clara',
+      name: 'Clara',
+      age: 29,
+      isLocal: false,
+      matchPercent: 87,
+      origin: 'Vancouver',
+      destination: 'New York',
+      dates: 'Dec 10 – 17',
+      image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&auto=format&fit=crop&q=80',
+      tags: ['Museums', 'Ice Skating', 'Holiday Markets', 'Culture'],
+      whyMatch: [
+        'Same destination (New York, USA)',
+        'Overlapping dates (Dec 12 - Dec 17)',
+        'Winter holiday events & festive markets'
+      ],
+      summary: 'Holiday lights in Dyker Heights, Bryant Park winter village, and ice skating.'
+    }
+  ],
+  Sydney: [
+    {
+      id: 'priya',
+      name: 'Priya',
+      age: 28,
+      isLocal: false,
+      matchPercent: 91,
+      origin: 'Bengaluru',
+      destination: 'Sydney',
+      dates: 'Dec 12 – 18',
+      image: 'assets/priya_profile.jpg',
+      tags: ['Coastal Walks', 'Food', 'Culture', 'Harbor'],
+      whyMatch: [
+        'Same destination (Sydney, Australia)',
+        'Same travel dates (Dec 12 - Dec 18)',
+        'Both love coastal walks & seafood',
+        'Both prefer cultural experiences'
+      ],
+      summary: 'Bondi to Coogee coastal walk, ferry trips to Manly, and sunset drinks by the Opera House.'
+    },
+    {
+      id: 'liam_syd',
+      name: 'Liam',
+      age: 30,
+      isLocal: true,
+      rating: 4.9,
+      connections: 18,
+      location: 'Bondi & Surry Hills, Sydney',
+      image: 'assets/arjun_profile.jpg',
+      tags: ['Local Host', 'Surfing', 'Secret Beaches', 'Brunch Spots'],
+      helpItems: ['Stay', 'Local food spots', 'Hidden places', 'City exploration', 'Cultural experiences'],
+      verified: true
+    },
+    {
+      id: 'mia',
+      name: 'Mia',
+      age: 25,
+      isLocal: false,
+      matchPercent: 88,
+      origin: 'Auckland',
+      destination: 'Sydney',
+      dates: 'Dec 11 – 18',
+      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80',
+      tags: ['Beaches', 'Cafes', 'Solo', 'Relaxed'],
+      whyMatch: [
+        'Same destination (Sydney, Australia)',
+        'Overlapping dates (Dec 11 - Dec 18)',
+        'Beach lifestyle & specialty coffee'
+      ],
+      summary: 'Morning swims in ocean pools and exploring specialty coffee cafes in Surry Hills.'
+    },
+    {
+      id: 'noah',
+      name: 'Noah',
+      age: 29,
+      isLocal: false,
+      matchPercent: 86,
+      origin: 'London',
+      destination: 'Sydney',
+      dates: 'Dec 12 – 22',
+      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=80',
+      tags: ['Adventure', 'Hiking', 'Harbor Kayaking', 'Outdoors'],
+      whyMatch: [
+        'Same destination (Sydney, Australia)',
+        'Overlapping dates (Dec 12 - Dec 18)',
+        'Outdoor adventure & day hikes'
+      ],
+      summary: 'Planning a day hike in the Blue Mountains and kayaking in Middle Harbour.'
+    },
+    {
+      id: 'chloe_syd',
+      name: 'Chloe',
+      age: 32,
+      isLocal: true,
+      rating: 4.8,
+      connections: 14,
+      location: 'Manly & Northern Beaches, Sydney',
+      image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80',
+      tags: ['Local Host', 'Snorkeling', 'Bushwalks', 'Seafood'],
+      helpItems: ['Hidden places', 'Local food spots', 'Cultural experiences'],
+      verified: true
+    },
+    {
+      id: 'ethan',
+      name: 'Ethan',
+      age: 27,
+      isLocal: false,
+      matchPercent: 83,
+      origin: 'Singapore',
+      destination: 'Sydney',
+      dates: 'Dec 13 – 19',
+      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=80',
+      tags: ['Photography', 'Architecture', 'Sunset', 'Budget'],
+      whyMatch: [
+        'Same destination (Sydney, Australia)',
+        'Overlapping dates (Dec 13 - Dec 18)',
+        'Photography & harbor sights'
+      ],
+      summary: 'Chasing sunset viewpoints across the harbor and architectural photo spots.'
+    },
+    {
+      id: 'isabella',
+      name: 'Isabella',
+      age: 26,
+      isLocal: false,
+      matchPercent: 90,
+      origin: 'Los Angeles',
+      destination: 'Sydney',
+      dates: 'Dec 12 – 18',
+      image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&auto=format&fit=crop&q=80',
+      tags: ['Foodie', 'Wine Tasting', 'Culture', 'Social'],
+      whyMatch: [
+        'Same destination (Sydney, Australia)',
+        'Identical travel dates (Dec 12 - Dec 18)',
+        'High compatibility on gastronomy & day trips'
+      ],
+      summary: 'Day trip to Hunter Valley wineries and checking out trendy Paddington eateries.'
+    },
+    {
+      id: 'jack',
+      name: 'Jack',
+      age: 28,
+      isLocal: false,
+      matchPercent: 85,
+      origin: 'Edinburgh',
+      destination: 'Sydney',
+      dates: 'Dec 10 – 18',
+      image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80',
+      tags: ['Pubs', 'Live Music', 'Hostels', 'Backpacking'],
+      whyMatch: [
+        'Same destination (Sydney, Australia)',
+        'Overlapping dates (Dec 12 - Dec 18)',
+        'Backpacker community & live music'
+      ],
+      summary: 'Exploring Newtown vintage shops, craft breweries, and live acoustic music.'
+    }
+  ]
+};
+
+// Simulated Active Profiles (Defaults to Bali)
+let simulatedProfiles = [...destinationProfiles.Bali];
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -201,8 +835,12 @@ function switchMode(mode) {
 
 function startTravelProfile(preSelectedDest) {
   if (preSelectedDest) {
-    document.getElementById('input-destination').value = preSelectedDest + ', Indonesia';
-    document.getElementById('input-local-dest').value = preSelectedDest + ', Indonesia';
+    const match = destinationList.find(d => d.code.toLowerCase() === preSelectedDest.toLowerCase()) ||
+                  destinationList.find(d => d.name.toLowerCase().includes(preSelectedDest.toLowerCase()));
+    const fullDest = match ? match.name : preSelectedDest;
+    document.getElementById('input-destination').value = fullDest;
+    document.getElementById('input-local-dest').value = fullDest;
+    appState.preferences.destination = fullDest;
   }
   switchView('view-preferences');
 }
@@ -639,13 +1277,14 @@ function triggerConnect(profileId) {
   if (!profile) return;
 
   pendingMatchId = profileId;
+  appState.currentMatchedProfile = profile;
 
-  if (profileId === 'priya') {
+  if (!profile.isLocal) {
     appState.hasMatchedWithPriya = true;
     
     // Configure overlay details
     document.getElementById('match-popup-avatar').src = profile.image;
-    document.getElementById('match-alert-desc').textContent = `You and Priya both want to travel to Bali in December!`;
+    document.getElementById('match-alert-desc').textContent = `You and ${profile.name} both want to travel to ${profile.destination} in December!`;
 
     // Show Match popup overlay
     const overlay = document.getElementById('match-overlay');
@@ -654,15 +1293,15 @@ function triggerConnect(profileId) {
     // Run Confetti
     runMatchConfetti();
   } else {
-    // Arjun or Sarah matching behavior (simple alerts/chats)
-    alert(`Connection request sent to ${profile.name}! You will receive a chat notification once they accept.`);
+    // Local Host connection request
+    alert(`Connection request sent to ${profile.name}! You will receive a notification once they accept.`);
     renderCardStack();
     switchView('view-discovery');
   }
 }
 
 function triggerConnectFromCompat() {
-  triggerConnect(pendingMatchId || 'priya');
+  triggerConnect(pendingMatchId || (simulatedProfiles[0] ? simulatedProfiles[0].id : 'priya'));
 }
 
 function dismissMatchOverlay() {
@@ -675,14 +1314,14 @@ function goToMatchedChat() {
   document.getElementById('match-overlay').classList.add('hidden');
   
   // Set up chat details
-  const profile = simulatedProfiles.find(p => p.id === 'priya');
+  const profile = appState.currentMatchedProfile || simulatedProfiles[0] || destinationProfiles.Bali[0];
   document.getElementById('chat-header-avatar').src = profile.image;
   document.getElementById('chat-header-name').textContent = profile.name;
-  document.getElementById('chat-header-subtext').textContent = `Matched for ${profile.destination} - ${profile.dates} ✈️`;
+  document.getElementById('chat-header-subtext').textContent = `Matched for ${profile.destination} - ${profile.dates || 'Dec 12–18'} ✈️`;
 
   // Dynamically set system badge message text for this destination
   document.getElementById('chat-match-system-badge').innerHTML = `
-    <p>✈️ You matched for ${profile.destination} same week · similar travel interests</p>
+    <p>✈️ You matched for ${profile.destination} same week · ${profile.matchPercent || 92}% travel compatibility</p>
   `;
   
   // Initialize chat messages
@@ -696,9 +1335,9 @@ function goToMatchedChat() {
 
   switchView('view-chat');
   
-  // Preload Figma screenshot transcript messages sequentially
+  // Preload transcript messages sequentially
   setTimeout(() => {
-    appendMessageBubble('priya', `Hey! So excited about this ${profile.destination} trip 🌴 Are you going solo?`, '10:32');
+    appendMessageBubble(profile.id, `Hey! So excited about this ${profile.destination} trip 🌴 Are you going solo?`, '10:32', profile.image);
     scrollToBottom();
   }, 300);
 
@@ -708,7 +1347,7 @@ function goToMatchedChat() {
   }, 700);
 
   setTimeout(() => {
-    appendMessageBubble('priya', `Same! I've been wanting to explore the local food scene — not just the tourist spots.`, '10:35');
+    appendMessageBubble(profile.id, `Same! I've been wanting to explore the local food scene — not just the tourist spots.`, '10:35', profile.image);
     scrollToBottom();
   }, 1100);
 }
@@ -812,14 +1451,15 @@ function handleChatEnter(event) {
   }
 }
 
-function appendMessageBubble(sender, text, timestamp) {
+function appendMessageBubble(sender, text, timestamp, customAvatar) {
   const chatFlow = document.getElementById('chat-flow-area');
   const wrap = document.createElement('div');
   wrap.className = `chat-bubble-wrap ${sender === 'user' ? 'outgoing' : 'incoming'}`;
 
   let avatarHTML = '';
   if (sender !== 'user') {
-    avatarHTML = `<img src="assets/priya_profile.jpg" alt="Priya" class="chat-bubble-avatar">`;
+    const avatar = customAvatar || (appState.currentMatchedProfile ? appState.currentMatchedProfile.image : 'assets/priya_profile.jpg');
+    avatarHTML = `<img src="${avatar}" alt="Partner" class="chat-bubble-avatar">`;
   }
 
   // Set default timestamp if not provided
@@ -867,6 +1507,9 @@ function triggerBotReply(userText) {
   indicator.classList.remove('hidden');
   scrollToBottom();
 
+  const partner = appState.currentMatchedProfile || simulatedProfiles[0] || destinationProfiles.Bali[0];
+  const destName = partner.destination || 'Bali';
+
   // Formulate response context
   let replyText = "";
   const query = userText.toLowerCase();
@@ -875,19 +1518,19 @@ function triggerBotReply(userText) {
     // Hide typing indicator
     indicator.classList.add('hidden');
 
-    if (query.includes('explore') || query.includes('plan') || query.includes('bali')) {
-      replyText = "I really want to check out Ubud first—mostly for the temples, local craft markets, and checking out Tegalalang. Then I want to head down south to Uluwatu for the cliffside views and sunset. How about you? Are you more into adventure or chilling on beaches?";
+    if (query.includes('explore') || query.includes('plan') || query.includes('dest') || query.includes('bali') || query.includes('tokyo') || query.includes('paris')) {
+      replyText = `I'm super excited about exploring ${destName}! I've been mapping out some top spots and hidden gems. How about you? Are you more into adventure, culture, or relaxing at cafes?`;
     } else if (query.includes('solo')) {
-      replyText = "Yes, traveling solo! I've done it in Europe before, but this is my first time in Southeast Asia. I love the freedom of setting my own pace, but it's always great to find someone to grab food or split local driver costs with.";
+      replyText = `Yes, traveling solo! I love the freedom of setting my own pace, but it's always great to find a companion to share meals or split local transportation with.`;
     } else if (query.includes('food') || query.includes('spot') || query.includes('eat')) {
-      replyText = "Oh, absolutely! I've read about a few traditional warungs serving Nasi Campur and Babi Guling in Ubud. Let's definitely explore a food spot together! Maybe we can meet up on the 13th?";
+      replyText = `Oh, absolutely! I have a list of local food spots and hidden eateries in ${destName}. Let's definitely grab a bite together during the trip!`;
     } else if (query.includes('hello') || query.includes('hi') || query.includes('hey')) {
-      replyText = "Hey! Great to chat. I was just mapping out my itinerary. Have you decided on where you're staying yet?";
+      replyText = `Hey! Great to chat. I was just reviewing my trip itinerary for ${destName}. Have you decided on where you're staying yet?`;
     } else {
-      replyText = "That sounds amazing! I'm really glad we connected. I want to keep the schedule somewhat flexible but having a companion for day trips would be awesome. Are you up for exploring some waterfalls?";
+      replyText = `That sounds awesome! I'm really glad we connected on Tinder Travel. Having a like-minded buddy for day trips will make this ${destName} journey so much better!`;
     }
 
-    receiveMessage('priya', replyText);
+    receiveMessage(partner.id || 'partner', replyText);
   }, 1800);
 }
 
@@ -949,53 +1592,27 @@ function updateProfilesForDestination(destination) {
 
   // Find destination config
   const destInfo = destinationList.find(d => d.code.toLowerCase() === cleanDest.toLowerCase()) || destinationList[0];
+  const destKey = destinationProfiles[destInfo.code] ? destInfo.code : 'Bali';
 
-  // Update Priya (profile 0)
-  const priya = simulatedProfiles.find(p => p.id === 'priya');
-  if (priya) {
-    priya.destination = destInfo.code;
-    priya.whyMatch[0] = `Same destination (${destInfo.name})`;
+  // Load the full 8-profile stack for this destination
+  simulatedProfiles = JSON.parse(JSON.stringify(destinationProfiles[destKey] || destinationProfiles.Bali));
+
+  // If the user specified custom travel dates, propagate them to traveler profiles
+  if (appState.preferences.startDate && appState.preferences.endDate) {
+    const dStart = new Date(appState.preferences.startDate);
+    const dEnd = new Date(appState.preferences.endDate);
+    const options = { month: 'short', day: 'numeric' };
+    const dateStr = `${dStart.toLocaleDateString('en-US', options)} – ${dEnd.getDate()}`;
     
-    // Change pictures according to city
-    if (destInfo.code === 'Tokyo') {
-      priya.image = 'assets/tokyo_priya.jpg';
-    } else if (destInfo.code === 'Paris') {
-      priya.image = 'assets/paris_priya.jpg';
-    } else {
-      priya.image = 'assets/priya_profile.jpg'; // default Bali/others
-    }
+    simulatedProfiles.forEach(p => {
+      if (!p.isLocal) {
+        p.dates = dateStr;
+      }
+    });
   }
 
-  // Update Arjun/Kenji/Pierre (profile 1)
-  const host = simulatedProfiles.find(p => p.id === 'arjun');
-  if (host) {
-    host.location = destInfo.name;
-    
-    // Change host identity & pictures according to city
-    if (destInfo.code === 'Tokyo') {
-      host.name = 'Kenji';
-      host.image = 'assets/tokyo_host.jpg';
-    } else if (destInfo.code === 'Paris') {
-      host.name = 'Pierre';
-      host.image = 'assets/paris_host.jpg';
-    } else if (destInfo.code === 'New York') {
-      host.name = 'John';
-      host.image = 'assets/arjun_profile.jpg';
-    } else if (destInfo.code === 'Sydney') {
-      host.name = 'Liam';
-      host.image = 'assets/arjun_profile.jpg';
-    } else {
-      host.name = 'Arjun';
-      host.image = 'assets/arjun_profile.jpg'; // default Bali
-    }
-  }
-
-  // Update Sarah (profile 2)
-  const sarah = simulatedProfiles.find(p => p.id === 'sarah');
-  if (sarah) {
-    sarah.destination = destInfo.code;
-    sarah.whyMatch[0] = `Same destination (${destInfo.name})`;
-  }
+  // Reset card stack index
+  appState.currentCardIndex = 0;
 }
 
 // --- AUTOCOMPLETE DROP SUGGESTIONS INITIALIZATION ---

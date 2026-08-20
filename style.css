@@ -575,13 +575,22 @@ body {
 }
 
 .trending-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.trending-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .destination-card {
   height: 180px;
+  min-width: 135px;
+  flex: 0 0 135px;
   border-radius: 16px;
   background-size: cover;
   background-position: center;
