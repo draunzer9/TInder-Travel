@@ -322,7 +322,7 @@
                   <span class="discovery-dates-sub" id="discovery-dates-header">Dec 12 – Dec 18</span>
                 </div>
                 <div class="discovery-actions">
-                  <span class="badge-premium">Premium+</span>
+                  <span class="badge-gold" id="discovery-membership-badge">✦ GOLD</span>
                   <button class="btn-icon-header" onclick="switchView('view-preferences')">
                     <!-- Filter icon -->
                     <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
@@ -536,14 +536,14 @@
 
                   <hr class="profile-divider">
 
-                  <!-- Premium Upgrade Box -->
+                  <!-- Tinder Gold Upgrade Box -->
                   <div class="premium-upgrade-card">
                     <div class="premium-upgrade-header">
                       <span class="gold-sparkle">✦</span>
-                      <h4>Tinder Travel Premium+</h4>
+                      <h4>Unlock with Tinder Gold</h4>
                     </div>
-                    <p>Unlock active traveler search! Browse the global traveler network, select destinations, and contact travelers heading your way.</p>
-                    <button class="btn-primary btn-premium-upgrade" onclick="upgradeToPremiumPlus()">Upgrade & Discover Travelers</button>
+                    <p>Includes <strong>Passport™</strong> and <strong>Travel Mode</strong>. Browse the global traveler network, select destinations, and connect with travelers heading your way.</p>
+                    <button class="btn-primary btn-premium-upgrade" onclick="upgradeToGold()">Get Tinder Gold</button>
                   </div>
                 </div>
               </div>
@@ -795,7 +795,51 @@
               </div>
             </div>
 
-            <!-- Profile View placeholder -->
+            <!-- ================= TINDER GOLD SOFT UPSELL MODAL ================= -->
+            <div class="gold-upsell-overlay hidden" id="gold-upsell-modal">
+              <div class="gold-upsell-backdrop" onclick="dismissGoldUpsell()"></div>
+              <div class="gold-upsell-sheet">
+                <div class="gold-upsell-handle"></div>
+                <div class="gold-badge-icon-wrap">
+                  <div class="gold-flame-icon">✦</div>
+                  <div class="gold-airplane-badge">✈️</div>
+                </div>
+                <h2>Unlock with Tinder Gold</h2>
+                <p class="gold-upsell-subtitle">Includes <strong>Passport™</strong> and <strong>Travel Mode</strong></p>
+                
+                <div class="gold-features-list">
+                  <div class="gold-feature-item">
+                    <span class="gold-feature-icon">✈️</span>
+                    <div class="gold-feature-text">
+                      <strong>Travel Mode</strong>
+                      <span>Match with compatible travelers heading to your destination on the same dates</span>
+                    </div>
+                  </div>
+                  <div class="gold-feature-item">
+                    <span class="gold-feature-icon">🌍</span>
+                    <div class="gold-feature-text">
+                      <strong>Passport™ to Anywhere</strong>
+                      <span>Teleport your location to any city worldwide before you arrive</span>
+                    </div>
+                  </div>
+                  <div class="gold-feature-item">
+                    <span class="gold-feature-icon">💛</span>
+                    <div class="gold-feature-text">
+                      <strong>See Who Likes You</strong>
+                      <span>Unlimited likes, 5 Super Likes per week, and 1 Free Boost per month</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="gold-upsell-actions">
+                  <button class="btn-primary btn-gold-upgrade" onclick="unlockGoldSubscription()">Unlock with Tinder Gold</button>
+                  <button class="btn-secondary btn-host-free" onclick="continueAsFreeHost()">Explore as Free Local Host</button>
+                  <button class="btn-text-dismiss" onclick="dismissGoldUpsell()">Maybe Later</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile View -->
             <div class="view" id="view-profile-setup">
               <div class="local-header view-header-nav">
                 <button class="back-btn" onclick="switchView('view-home')">
@@ -809,9 +853,17 @@
                   <img src="assets/user_avatar.jpg" alt="My Profile">
                   <h2>Emily, 25</h2>
                   <span>📍 Bengaluru, India</span>
-                  <div class="profile-membership-badge premium-plus" id="profile-membership-badge">Premium+</div>
+                  <div class="profile-membership-badge gold" id="profile-membership-badge">✦ TINDER GOLD</div>
                 </div>
                 <div class="profile-list-links">
+                  <div class="profile-link-item" onclick="toggleMembershipSimulation()">
+                    <span class="link-icon">👑</span>
+                    <div class="link-label">
+                      <strong>Membership: <span id="profile-status-text">Tinder Gold</span></strong>
+                      <span id="profile-status-sub">Tap to toggle Free Member / Gold gate</span>
+                    </div>
+                    <span class="arrow-r">⇄</span>
+                  </div>
                   <div class="profile-link-item" onclick="switchView('view-preferences')">
                     <span class="link-icon">⚙️</span>
                     <div class="link-label">

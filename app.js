@@ -10,7 +10,9 @@ const destinationList = [
 // --- APPLICATION STATE ---
 const appState = {
   activeView: 'view-home',
-  datingMode: 'travel', // 'travel' or 'dating'
+  datingMode: 'dating', // 'travel' or 'dating' (starts on dating for free tier simulation)
+  hasGold: false,       // simulates free user gate; tapping Travel triggers soft upsell
+  pendingDest: '',
   profileCompleted: false,
   preferences: {
     tags: ['Budget', 'Adventure', 'Culture', 'Food', 'Travel companion'],
@@ -728,6 +730,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize destination autocomplete suggestions
   initAutocomplete();
   
+  // Initialize membership UI
+  updateMembershipUI();
+
+  // Initialize initial mode (e.g. Dating mode for free gate simulation)
+  switchMode(appState.datingMode);
+
   // Render card stack initially
   renderCardStack();
 });
@@ -756,6 +764,10 @@ function switchTab(tabId) {
     switchMode('dating');
     switchView('view-home');
   } else if (tabId === 'travel') {
+    if (!appState.hasGold) {
+      showGoldUpsell();
+      return;
+    }
     switchMode('travel');
     if (appState.profileCompleted) {
       if (appState.preferences.mode === 'local') {
@@ -808,10 +820,15 @@ function switchMode(mode) {
   const travelContent = document.getElementById('travel-home-content');
   const datingContent = document.getElementById('dating-home-content');
 
+  if (mode === 'travel' && !appState.hasGold) {
+    showGoldUpsell();
+    return;
+  }
+
   appState.datingMode = mode;
 
   if (mode === 'dating') {
-    modeBg.style.transform = 'translateX(100%)';
+    modeBg.style.transform = 'translateX(0)';
     btnDating.classList.add('active');
     btnTravel.classList.remove('active');
     
@@ -821,7 +838,7 @@ function switchMode(mode) {
     document.getElementById('nav-btn-dating').classList.add('active');
     document.getElementById('nav-btn-travel').classList.remove('active');
   } else {
-    modeBg.style.transform = 'translateX(0)';
+    modeBg.style.transform = 'translateX(100%)';
     btnTravel.classList.add('active');
     btnDating.classList.remove('active');
     
@@ -834,6 +851,11 @@ function switchMode(mode) {
 }
 
 function startTravelProfile(preSelectedDest) {
+  if (!appState.hasGold) {
+    showGoldUpsell(preSelectedDest);
+    return;
+  }
+  
   if (preSelectedDest) {
     const match = destinationList.find(d => d.code.toLowerCase() === preSelectedDest.toLowerCase()) ||
                   destinationList.find(d => d.name.toLowerCase().includes(preSelectedDest.toLowerCase()));
@@ -1693,17 +1715,112 @@ function initAutocomplete() {
   });
 }
 
-// --- PREMIUM+ MONETIZATION UPGRADE TRIGGER ---
+// --- TINDER GOLD GATE & MONETIZATION UPSELL HANDLERS ---
+function showGoldUpsell(pendingDest) {
+  if (pendingDest) {
+    appState.pendingDest = pendingDest;
+  }
+  const modal = document.getElementById('gold-upsell-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+  }
+}
+
+function dismissGoldUpsell() {
+  const modal = document.getElementById('gold-upsell-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+  }
+}
+
+function unlockGoldSubscription() {
+  appState.hasGold = true;
+  dismissGoldUpsell();
+  updateMembershipUI();
+  
+  // Activate Travel Mode
+  switchMode('travel');
+  
+  // Show confirmation alert
+  alert("🎉 Welcome to Tinder Gold!\n\nPassport™ and Travel Mode are now unlocked. Find travel companions, explore destinations, and connect before your trip.");
+
+  if (appState.pendingDest) {
+    const dest = appState.pendingDest;
+    appState.pendingDest = '';
+    startTravelProfile(dest);
+  } else if (!appState.profileCompleted) {
+    switchView('view-home');
+  } else {
+    switchView('view-discovery');
+  }
+}
+
+function continueAsFreeHost() {
+  dismissGoldUpsell();
+  appState.preferences.mode = 'local';
+  selectIntentMode('local');
+  switchView('view-preferences');
+  
+  // Pre-fill destination if selected
+  if (appState.pendingDest) {
+    const match = destinationList.find(d => d.code.toLowerCase() === appState.pendingDest.toLowerCase()) ||
+                  destinationList.find(d => d.name.toLowerCase().includes(appState.pendingDest.toLowerCase()));
+    const fullDest = match ? match.name : appState.pendingDest;
+    document.getElementById('input-local-dest').value = fullDest;
+    appState.preferences.destination = fullDest;
+    appState.pendingDest = '';
+  }
+}
+
+function upgradeToGold() {
+  unlockGoldSubscription();
+}
+
 function upgradeToPremiumPlus() {
-  // Update state to traveler (Premium)
-  appState.preferences.mode = 'traveler';
+  unlockGoldSubscription();
+}
+
+function toggleMembershipSimulation() {
+  appState.hasGold = !appState.hasGold;
+  updateMembershipUI();
   
-  // Set destination values on the traveler form
-  document.getElementById('input-destination').value = appState.preferences.destination;
-  
-  // Upgrade notification
-  alert("🎉 Congratulations! You have successfully upgraded to Tinder Travel Premium+\n\nDiscovery Mode is unlocked! You can now browse global travelers heading to your destination.");
-  
-  // Re-run completePreferences to initialize traveler state & discovery view
-  completePreferences();
+  if (appState.hasGold) {
+    alert("👑 Simulation: Switched to Tinder Gold user!\n\nTravel Mode and Passport™ are now unlocked.");
+  } else {
+    alert("🔒 Simulation: Switched to Free member!\n\nTapping Travel Mode will now simulate the Gold soft upsell gate.");
+    if (appState.datingMode === 'travel') {
+      switchMode('dating');
+    }
+  }
+}
+
+function updateMembershipUI() {
+  const profileBadge = document.getElementById('profile-membership-badge');
+  const profileText = document.getElementById('profile-status-text');
+  const profileSub = document.getElementById('profile-status-sub');
+  const discoveryBadge = document.getElementById('discovery-membership-badge');
+
+  if (appState.hasGold) {
+    if (profileBadge) {
+      profileBadge.className = 'profile-membership-badge gold';
+      profileBadge.textContent = '✦ TINDER GOLD';
+    }
+    if (profileText) profileText.textContent = 'Tinder Gold';
+    if (profileSub) profileSub.textContent = 'Active (Passport™ & Travel Mode Unlocked)';
+    if (discoveryBadge) {
+      discoveryBadge.className = 'badge-gold';
+      discoveryBadge.textContent = '✦ GOLD';
+    }
+  } else {
+    if (profileBadge) {
+      profileBadge.className = 'profile-membership-badge free-tier';
+      profileBadge.textContent = 'FREE MEMBER';
+    }
+    if (profileText) profileText.textContent = 'Free Member';
+    if (profileSub) profileSub.textContent = 'Tap to simulate Tinder Gold unlock';
+    if (discoveryBadge) {
+      discoveryBadge.className = 'badge-gold';
+      discoveryBadge.textContent = '✦ GOLD';
+    }
+  }
 }
